@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beacon — short links that report back</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <div class="mark"></div>
+      <div>
+        <h1>Beacon</h1>
+        <p>Short links that report back.</p>
+      </div>
+    </header>
+
+    <form id="new-link">
+      <div class="field" style="flex:2;">
+        <label for="originalUrl">URL to shorten</label>
+        <input id="originalUrl" name="originalUrl" placeholder="https://example.com/a/very/long/path" autocomplete="off" />
+      </div>
+      <div class="field" style="flex:1;">
+        <label for="label">Label <span class="optional">(optional)</span></label>
+        <input id="label" name="label" placeholder="campaign name" autocomplete="off" />
+      </div>
+      <button type="submit">Shorten</button>
+    </form>
+    <p id="form-error" class="error" hidden></p>
+
+    <section id="links">
+      <% if (links.length === 0) { %>
+        <p class="empty-state">No signals sent yet. Shorten your first link above.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Short link</th>
+              <th>Destination</th>
+              <th>Clicks</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% links.forEach(function(link) { %>
+              <tr data-id="<%= link.id %>">
+                <td>
+                  <a class="short" href="/<%= link.shortCode %>" target="_blank" rel="noopener">/<%= link.shortCode %></a>
+                  <% if (link.label) { %><span class="label"><%= link.label %></span><% } %>
+                </td>
+                <td class="destination" title="<%= link.originalUrl %>"><%= link.originalUrl %></td>
+                <td class="clicks"><%= link.clicks %></td>
+                <td><button class="remove-btn" data-action="remove">Remove</button></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
